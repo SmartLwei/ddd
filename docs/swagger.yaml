@@ -1,0 +1,45 @@
+definitions:
+  dto.DemoResp:
+    properties:
+      id:
+        type: integer
+    type: object
+  dto.JSONResult:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /svc-name/api/v1/demo/hello:
+    get:
+      consumes:
+      - application/json
+      description: demo接口功能描述
+      operationId: Demo
+      parameters:
+      - example: 1
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.JSONResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.DemoResp'
+              type: object
+      summary: demo接口功能
+      tags:
+      - demo
+swagger: "2.0"
