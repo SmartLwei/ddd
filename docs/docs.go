@@ -24,9 +24,9 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/svc-name/api/v1/demo/hello": {
-            "get": {
-                "description": "demo接口功能描述",
+        "/demo/api/v1/demo": {
+            "post": {
+                "description": "数据库增接口demo的描述内容",
                 "consumes": [
                     "application/json"
                 ],
@@ -36,13 +36,65 @@ var doc = `{
                 "tags": [
                     "demo"
                 ],
-                "summary": "demo接口功能",
-                "operationId": "Demo",
+                "summary": "数据库增接口demo",
+                "operationId": "InsertDemo",
+                "parameters": [
+                    {
+                        "description": "AddDemoReq",
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AddDemoReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.JSONResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/demo/api/v1/demos": {
+            "get": {
+                "description": "数据库查接口demo的描述内容",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "demo"
+                ],
+                "summary": "数据库查接口demo",
+                "operationId": "GetDemos",
                 "parameters": [
                     {
                         "type": "integer",
                         "example": 1,
                         "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 10,
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "demo_name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 0,
+                        "name": "offset",
                         "in": "query"
                     }
                 ],
@@ -58,7 +110,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.DemoResp"
+                                            "$ref": "#/definitions/dto.GetDemosResp"
                                         }
                                     }
                                 }
@@ -70,11 +122,40 @@ var doc = `{
         }
     },
     "definitions": {
-        "dto.DemoResp": {
+        "dto.AddDemoReq": {
             "type": "object",
             "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "demo_name"
+                }
+            }
+        },
+        "dto.Demo": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
+                },
+                "string": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetDemosResp": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "demos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Demo"
+                    }
                 }
             }
         },

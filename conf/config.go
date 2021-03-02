@@ -1,9 +1,15 @@
 package conf
 
-import "sync"
+import (
+	"fmt"
+	"gopkg.in/yaml.v2"
+	"os"
+	"sync"
+)
 
 type Setting struct {
-	Rest *RestSetting
+	Rest *RestSetting `json:"rest" yaml:"rest"`
+	DB   *DBSetting   `json:"db" yaml:"db"`
 }
 
 var once = &sync.Once{}
@@ -14,9 +20,33 @@ type RestSetting struct {
 	Mode string `json:"mode" yaml:"mode"`
 }
 
+func (rs *RestSetting) String() string {
+	return fmt.Sprintf("{port: %s, mode: %s}", rs.Port, rs.Mode)
+}
+
+type DBSetting struct {
+	URI          string `json:"uri" yaml:"uri"`
+	LogLevel     int    `json:"log_level" yaml:"log_level"`
+	MaxIdleConns int    `json:"max_idle_conns" yaml:"max_idle_conns"`
+	MaxOpenConns int    `json:"max_open_conns" yaml:"max_open_conns"`
+}
+
+func (dbs *DBSetting) String() string {
+	return fmt.Sprintf("{uri: %s, log_level:%d, max_idle_conns:%d, max_open_conns:%d}", dbs.URI, dbs.LogLevel,
+		dbs.MaxIdleConns, dbs.MaxOpenConns)
+}
+
 func Init(fileName string) {
 	once.Do(func() {
-		setting = &Setting{Rest: &RestSetting{Port: ":8080"}}
+		content, err := os.ReadFile(fileName)
+		if err != nil {
+			panic("read file " + fileName + " failed")
+		}
+		var cf = new(Setting)
+		if err := yaml.Unmarshal(content, cf); err != nil {
+			panic("unmarshal setting failed:" + err.Error())
+		}
+		setting = cf
 	})
 }
 

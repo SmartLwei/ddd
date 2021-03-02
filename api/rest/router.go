@@ -51,8 +51,9 @@ func (r *Router) buildRouter() {
 
 	engine.GET("/", func(c *gin.Context) { c.JSON(http.StatusOK, "service is alive") })
 	{
-		apiV1 := engine.Group("/svc-name/api/v1")
-		apiV1.GET("/demo/hello", r.handler.Demo.Demo)
+		apiV1 := engine.Group("/demo/api/v1")
+		apiV1.POST("/demo", r.handler.Demo.AddDemo)
+		apiV1.GET("/demos", r.handler.Demo.GetDemos)
 	}
 	r.server = &http.Server{Addr: r.setting.Port, Handler: engine}
 }

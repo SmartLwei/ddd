@@ -1,8 +1,27 @@
 definitions:
-  dto.DemoResp:
+  dto.AddDemoReq:
     properties:
+      name:
+        example: demo_name
+        type: string
+    type: object
+  dto.Demo:
+    properties:
+      created_at:
+        type: integer
       id:
         type: integer
+      string:
+        type: string
+    type: object
+  dto.GetDemosResp:
+    properties:
+      count:
+        type: integer
+      demos:
+        items:
+          $ref: '#/definitions/dto.Demo'
+        type: array
     type: object
   dto.JSONResult:
     properties:
@@ -16,16 +35,50 @@ definitions:
 info:
   contact: {}
 paths:
-  /svc-name/api/v1/demo/hello:
+  /demo/api/v1/demo:
+    post:
+      consumes:
+      - application/json
+      description: 数据库增接口demo的描述内容
+      operationId: InsertDemo
+      parameters:
+      - description: AddDemoReq
+        in: body
+        name: data
+        schema:
+          $ref: '#/definitions/dto.AddDemoReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.JSONResult'
+      summary: 数据库增接口demo
+      tags:
+      - demo
+  /demo/api/v1/demos:
     get:
       consumes:
       - application/json
-      description: demo接口功能描述
-      operationId: Demo
+      description: 数据库查接口demo的描述内容
+      operationId: GetDemos
       parameters:
       - example: 1
         in: query
         name: id
+        type: integer
+      - example: 10
+        in: query
+        name: limit
+        type: integer
+      - example: demo_name
+        in: query
+        name: name
+        type: string
+      - example: 0
+        in: query
+        name: offset
         type: integer
       produces:
       - application/json
@@ -37,9 +90,9 @@ paths:
             - $ref: '#/definitions/dto.JSONResult'
             - properties:
                 data:
-                  $ref: '#/definitions/dto.DemoResp'
+                  $ref: '#/definitions/dto.GetDemosResp'
               type: object
-      summary: demo接口功能
+      summary: 数据库查接口demo
       tags:
       - demo
 swagger: "2.0"

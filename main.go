@@ -6,6 +6,7 @@ import (
 	"ddd/cntlr"
 	"ddd/conf"
 	_ "ddd/docs"
+	"ddd/infra/db"
 	"fmt"
 	"os"
 	"os/signal"
@@ -33,6 +34,7 @@ func init() {
 // 新建各层的实例，从底层一步步往上初始化各个实例
 func newInstances() {
 	conf.Init("conf/config.yaml")
+	db.Init()
 	cntlr.Init()
 	handler.Init()
 	rest.Init()

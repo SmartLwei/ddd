@@ -1,2 +1,4 @@
 .idea/
 ddd
+script/mysql/data
+script/mysql/init
