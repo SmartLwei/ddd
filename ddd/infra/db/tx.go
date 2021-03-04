@@ -3,11 +3,12 @@ package db
 import (
 	"ddd/conf"
 	"ddd/domain"
+	"sync"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"sync"
 )
 
 var tx Tx

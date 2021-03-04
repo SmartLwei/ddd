@@ -2,9 +2,10 @@ package conf
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"os"
 	"sync"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Setting struct {

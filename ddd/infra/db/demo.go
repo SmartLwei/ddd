@@ -26,10 +26,10 @@ func (DemoRepo) Get(tx Tx, filter *domain.DemoFilter) (int64, []*domain.Demo, er
 		db = db.Where("name=?", filter.Name)
 	}
 	db = db.Count(&count)
-	if filter.Limit > 0{
+	if filter.Limit > 0 {
 		db = db.Limit(filter.Limit)
 	}
-	if filter.Offset > 0{
+	if filter.Offset > 0 {
 		db = db.Offset(filter.Offset)
 	}
 	db = db.Order("name desc")
