@@ -10,6 +10,7 @@ import (
 
 type Setting struct {
 	Rest *RestSetting `json:"rest" yaml:"rest"`
+	Grpc *GrpcSetting `json:"grpc" yaml:"grpc"`
 	DB   *DBSetting   `json:"db" yaml:"db"`
 }
 
@@ -23,6 +24,14 @@ type RestSetting struct {
 
 func (rs *RestSetting) String() string {
 	return fmt.Sprintf("{port: %s, mode: %s}", rs.Port, rs.Mode)
+}
+
+type GrpcSetting struct {
+	Port string `json:"port" yaml:"port"`
+}
+
+func (gs *GrpcSetting) String() string {
+	return fmt.Sprintf("{port: %d}", gs.Port)
 }
 
 type DBSetting struct {
