@@ -33,7 +33,7 @@ func init() {
 
 // 新建各层的实例，从底层一步步往上初始化各个实例
 func newInstances() {
-	conf.Init("conf/config.yaml")
+	conf.Init("ddd/conf/config.yaml")
 	db.Init()
 	cntlr.Init()
 	handler.Init()
