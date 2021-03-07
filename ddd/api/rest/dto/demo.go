@@ -3,9 +3,9 @@ package dto
 import "ddd/domain"
 
 type JSONResult struct {
-	Code    int64 `json:"code"`
-	Data    interface{}
-	Message string `json:"message"`
+	Code    int64       `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 
 type AddDemoReq struct {
