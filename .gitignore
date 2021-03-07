@@ -1,4 +1,6 @@
 ddd/conf/config.yaml
 ddd/ddd
+*/*.pyc
 
+*/*/__pycache__/
 .idea/
