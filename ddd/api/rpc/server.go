@@ -6,9 +6,10 @@ import (
 	"ddd/conf"
 	"ddd/domain"
 	"ddd/infra/db"
-	"google.golang.org/grpc"
 	"net"
 	"sync"
+
+	"google.golang.org/grpc"
 )
 
 type GRPCService struct {

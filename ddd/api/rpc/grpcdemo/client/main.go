@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
+	gd "ddd/api/rpc/grpcdemo"
 	"fmt"
-	gd "github.com/smartlwei/grpcdemo"
-	"google.golang.org/grpc"
 	"time"
+
+	"google.golang.org/grpc"
 )
 
 func main() {

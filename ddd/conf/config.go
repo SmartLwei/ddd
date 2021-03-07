@@ -31,7 +31,7 @@ type GrpcSetting struct {
 }
 
 func (gs *GrpcSetting) String() string {
-	return fmt.Sprintf("{port: %d}", gs.Port)
+	return fmt.Sprintf("{port: %s}", gs.Port)
 }
 
 type DBSetting struct {

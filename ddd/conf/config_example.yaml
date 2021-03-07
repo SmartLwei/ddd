@@ -6,3 +6,5 @@ db:
   log_level: 4
   max_idle_conns: 10
   max_open_conns: 20
+grpc:
+  port: :8081

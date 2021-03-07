@@ -1,4 +1,4 @@
-.idea/
-script/mysql/data
-script/mysql/init
+ddd/conf/config.yaml
 ddd/ddd
+
+.idea/
