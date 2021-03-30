@@ -13,8 +13,12 @@ class DemoService:
         self.header = headers_g
 
     def service_alive(self):
-        r = requests.get(url=self.host, headers=self.header)
-        txt = r.json()
+        txt = ""
+        try:
+            r = requests.get(url=self.host, headers=self.header)
+            txt = r.json()
+        except requests.exceptions.ConnectionError as e:
+            pass
         return txt == "service is alive"
 
     def add_demo(self, name):
@@ -34,5 +38,6 @@ class DemoService:
 if __name__ == "__main__":
     demo_svc = DemoService()
     if demo_svc.service_alive():
+        print("service is alive, now run demos")
         demo_svc.add_demo("test_name")
         demo_svc.get_demos("test_name")
