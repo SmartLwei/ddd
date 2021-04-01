@@ -1,0 +1,10 @@
+rest:
+  port: :8080
+  mode: debug
+db:
+  uri: root:123456@tcp(172.20.0.2:3306)/test?charset=utf8mb4&parseTime=True&loc=Local
+  log_level: 4
+  max_idle_conns: 10
+  max_open_conns: 20
+grpc:
+  port: :8081
