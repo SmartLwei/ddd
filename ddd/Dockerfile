@@ -11,6 +11,6 @@ RUN go build -o app main.go
 
 FROM golang AS production
 ARG APP_PORT
-WORKDIR /app/
+WORKDIR /app
 COPY --from=development /build/app .
 EXPOSE ${APP_PORT}

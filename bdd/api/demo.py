@@ -1,15 +1,18 @@
 import json
+import os
 
 import requests
 
-host_g = "http://localhost:8080"
+default_host = "http://"
 headers_g = {"accept": "*/*", "Content-Type": "application/json;charset=UTF-8"}
 
 
 class DemoService:
 
     def __init__(self):
-        self.host = host_g
+        ddd_host = os.environ.get('ddd_host', default_host)
+        print("ddd_host", ddd_host)
+        self.host = ddd_host
         self.header = headers_g
 
     def service_alive(self):
