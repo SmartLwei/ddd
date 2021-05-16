@@ -1,10 +1,10 @@
 package rpc
 
 import (
-	"context"
+	"ddd/api/rpc/handler"
 	"net"
 
-	gd "ddd/api/rpc/grpcdemo"
+	gd "ddd/api/rpc/dddcli"
 	"ddd/application"
 	"ddd/conf"
 
@@ -14,14 +14,15 @@ import (
 type GRPCService struct {
 	setting *conf.GrpcSetting
 	server  *grpc.Server
-	ctl     *application.Factory
+	handler *handler.GRPCHandler
 }
 
-func NewGrpcService(setting *conf.GrpcSetting, ctl *application.Factory) *GRPCService {
+func NewGrpcService(setting *conf.GrpcSetting, appFac *application.Factory) *GRPCService {
 	var s GRPCService
 	s.setting = setting
-	s.ctl = ctl
 	s.server = grpc.NewServer()
+	var hdl = handler.NewGRPCHandler(appFac)
+	s.handler = hdl
 	return &s
 }
 
@@ -30,7 +31,7 @@ func (gs *GRPCService) Run() {
 	if err != nil {
 		panic("failed to listen on port " + gs.setting.Port + ": " + err.Error())
 	}
-	gd.RegisterDemoServiceServer(gs.server, gs)
+	gd.RegisterDDDServiceServer(gs.server, gs.handler)
 	if err := gs.server.Serve(lis); err != nil {
 		panic("grpc server failed to serve:" + err.Error())
 	}
@@ -38,8 +39,4 @@ func (gs *GRPCService) Run() {
 
 func (gs *GRPCService) Stop() {
 	gs.server.GracefulStop()
-}
-
-func (gs *GRPCService) GetDemos(ctx context.Context, req *gd.GetDemosReq) (*gd.GetDemosResp, error) {
-	return gs.ctl.UserSvc.GrpcGetUsers(req)
 }

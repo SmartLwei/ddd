@@ -11,12 +11,15 @@ import (
 )
 
 type Factory struct {
+	db       *gorm.DB
 	UserRepo UserItf
 }
 
 func NewFactory(orm *gorm.DB) *Factory {
 	var f Factory
+	f.db = orm
 	f.UserRepo = NewUserRepo(orm)
+	f.autoMigTables()
 	return &f
 }
 
@@ -43,11 +46,12 @@ func NewGorm(setting *conf.DBSetting) *gorm.DB {
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxIdleConns(setting.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(setting.MaxOpenConns)
+
 	return db
 }
 
-func autoMigTables(db *gorm.DB) {
-	if err := db.AutoMigrate(&domain.User{}); err != nil {
+func (f *Factory) autoMigTables() {
+	if err := f.db.AutoMigrate(&domain.User{}); err != nil {
 		panic("auto migrate demo failed: " + err.Error())
 	}
 }

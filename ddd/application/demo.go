@@ -2,7 +2,7 @@ package application
 
 import (
 	"ddd/api/rest/dto"
-	gd "ddd/api/rpc/grpcdemo"
+	gd "ddd/api/rpc/dddcli"
 	"ddd/domain"
 	"ddd/infra/rdb"
 )
@@ -50,7 +50,7 @@ func (d *UserService) GetUsers(req *dto.GetUserReq) (*dto.GetUserResp, error) {
 }
 
 // GrpcGetUsers get demos from database for grpc interface
-func (d *UserService) GrpcGetUsers(req *gd.GetDemosReq) (*gd.GetDemosResp, error) {
+func (d *UserService) GrpcGetUsers(req *gd.GetUsersReq) (*gd.GetUsersResp, error) {
 	var filter = &domain.UserFilter{
 		ID:     req.Id,
 		Name:   req.Name,
@@ -62,14 +62,14 @@ func (d *UserService) GrpcGetUsers(req *gd.GetDemosReq) (*gd.GetDemosResp, error
 		return nil, err
 	}
 
-	var grpcDemos []*gd.Demo
+	var grpcDemos []*gd.User
 	for _, d := range domainDemos {
-		var dd = &gd.Demo{
+		var dd = &gd.User{
 			Id:        d.ID,
 			CreatedAt: d.CreatedAt,
 			Name:      d.Name,
 		}
 		grpcDemos = append(grpcDemos, dd)
 	}
-	return &gd.GetDemosResp{Count: count, Demos: grpcDemos}, nil
+	return &gd.GetUsersResp{Count: count, Users: grpcDemos}, nil
 }
