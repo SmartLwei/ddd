@@ -1,12 +1,13 @@
 package log
 
 import (
-	"go.uber.org/zap"
-	zapcore "go.uber.org/zap/zapcore"
 	"io"
 	"os"
 	"strings"
 	"time"
+
+	"go.uber.org/zap"
+	zapcore "go.uber.org/zap/zapcore"
 )
 
 var sugar *zap.SugaredLogger

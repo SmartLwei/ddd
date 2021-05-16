@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"net/http"
+
 	"ddd/api/rest/dto"
 	"ddd/cntlr"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )

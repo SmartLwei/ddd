@@ -17,7 +17,7 @@ func (req *AddDemoReq) ValidateAnd2Model() (*domain.Demo, error) {
 }
 
 type Demo struct {
-	ID        uint   `json:"id"`
+	ID        int64  `json:"id"`
 	CreatedAt int64  `json:"created_at"`
 	Name      string `json:"string"`
 }

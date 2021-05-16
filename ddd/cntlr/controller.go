@@ -1,23 +1,19 @@
 package cntlr
 
-import "sync"
+import (
+	"ddd/infra/db"
+)
 
 type Controller struct {
 	DemoCtl *Demo
 }
 
-var once = &sync.Once{}
-var controller *Controller
-
-func Init() {
-	once.Do(func() {
-		controller = &Controller{DemoCtl: &Demo{}}
-	})
+func NewController(repoFactory *db.Factory) *Controller {
+	var c = Controller{}
+	c.DemoCtl = NewDemo(repoFactory.GetDemoRepo())
+	return &c
 }
 
-func GetController() *Controller {
-	if controller == nil {
-		panic("get controller failed, please init controller first")
-	}
-	return controller
+func (c *Controller) GetDemoController() *Demo {
+	return c.DemoCtl
 }

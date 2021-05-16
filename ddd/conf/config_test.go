@@ -15,9 +15,9 @@ func TestInit(t *testing.T) {
 			MaxIdleConns: 10,
 			MaxOpenConns: 20,
 		},
+		Grpc: &GrpcSetting{Port: ":8081"},
 	}
-	Init(fileName)
-	setting = GetSetting()
+	var setting = BuildConfig(fileName)
 	if eq := reflect.DeepEqual(wantSetting, setting); !eq {
 		t.Errorf("GetSetting() got = \n%+v\n, want \n%+v\n", setting, wantSetting)
 	}

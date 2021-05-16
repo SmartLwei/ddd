@@ -2,17 +2,18 @@ package rest
 
 import (
 	"context"
-	"ddd/api/rest/handler"
-	"ddd/conf"
 	"fmt"
 	"net/http"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+
+	"ddd/api/rest/handler"
+	"ddd/cntlr"
+	"ddd/conf"
 )
 
 type Router struct {
@@ -21,23 +22,16 @@ type Router struct {
 	handler *handler.Handler
 }
 
-var once = &sync.Once{}
-var router *Router
+func NewRouter(setting *conf.RestSetting, controller *cntlr.Controller) *Router {
 
-func Init() {
-	once.Do(func() {
-		var restSetting = conf.GetSetting().Rest
-		var restHandler = handler.GetHandler()
-		gin.SetMode(strings.ToLower(restSetting.Mode))
-		router = &Router{handler: restHandler, setting: restSetting}
-		router.buildRouter()
-	})
-}
+	var router = &Router{}
+	gin.SetMode(strings.ToLower(setting.Mode))
+	router.setting = setting
 
-func GetRouter() *Router {
-	if router == nil {
-		panic("get router failed, please init router first")
-	}
+	var demoHandler = handler.NewDemoHandler(controller.DemoCtl)
+	router.handler = handler.NewHandler(demoHandler)
+
+	router.buildRouter()
 	return router
 }
 

@@ -2,21 +2,29 @@ package db
 
 import (
 	"ddd/domain"
+
+	"gorm.io/gorm"
 )
 
 type DemoItf interface {
-	Insert(tx Tx, demo *domain.Demo) error
-	Get(tx Tx, filter *domain.DemoFilter) (int64, []*domain.Demo, error)
+	Insert(demo *domain.Demo) error
+	Get(filter *domain.DemoFilter) (int64, []*domain.Demo, error)
 }
 
-type DemoRepo struct{}
-
-func (DemoRepo) Insert(tx Tx, demo *domain.Demo) error {
-	return tx.Gorm().Create(demo).Error
+type DemoRepo struct {
+	orm *gorm.DB
 }
 
-func (DemoRepo) Get(tx Tx, filter *domain.DemoFilter) (int64, []*domain.Demo, error) {
-	var db = tx.Gorm().Model(&domain.Demo{})
+func NewDemo(orm *gorm.DB) DemoItf {
+	return &DemoRepo{orm: orm}
+}
+
+func (d *DemoRepo) Insert(demo *domain.Demo) error {
+	return d.orm.Create(demo).Error
+}
+
+func (d *DemoRepo) Get(filter *domain.DemoFilter) (int64, []*domain.Demo, error) {
+	var db = d.orm.Model(&domain.Demo{})
 	var count int64
 	var demos []*domain.Demo
 	if filter.ID != 0 {

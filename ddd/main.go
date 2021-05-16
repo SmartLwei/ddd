@@ -2,7 +2,6 @@ package main
 
 import (
 	"ddd/api/rest"
-	"ddd/api/rest/handler"
 	"ddd/api/rpc"
 	"ddd/cntlr"
 	"ddd/conf"
@@ -15,12 +14,25 @@ import (
 )
 
 func main() {
-	var httpServer = rest.GetRouter()
-	httpServer.Run()
+	// global config
+	var setting = getSetting()
 
-	var grpcServer = rpc.GetGRPCService()
+	// infrastructure layer
+	var orm = db.NewGorm(setting.DB)
+	var repoFactory = db.NewFactory(orm)
+
+	// application layer
+	var controller = cntlr.NewController(repoFactory)
+
+	// API layer
+	var httpServer = rest.NewRouter(setting.Rest, controller)
+	var grpcServer = rpc.NewGrpcService(setting.Grpc, controller)
+
+	// run services
+	httpServer.Run()
 	grpcServer.Run()
 
+	// wait signal to exit service
 	chSig := make(chan os.Signal, 1)
 	signal.Notify(chSig, syscall.SIGINT, syscall.SIGTERM, syscall.SIGBUS)
 	for sig := range chSig {
@@ -29,19 +41,14 @@ func main() {
 		grpcServer.Stop()
 		break
 	}
+
+	// gracefully exit service
+	grpcServer.Stop()
+	httpServer.Stop()
+
 	fmt.Println("service exited")
 }
 
-func init() {
-	newInstances()
-}
-
-// 新建各层的实例，从底层一步步往上初始化各个实例
-func newInstances() {
-	conf.Init("conf/config.yaml")
-	rpc.Init()
-	db.Init()
-	cntlr.Init()
-	handler.Init()
-	rest.Init()
+func getSetting() *conf.Setting {
+	return conf.BuildConfig("conf/config.yaml")
 }
