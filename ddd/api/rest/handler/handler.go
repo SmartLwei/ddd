@@ -1,11 +1,11 @@
 package handler
 
-type Handler struct {
-	Demo *Demo
+type Factory struct {
+	UserHdl *UserHandler
 }
 
-func NewHandler(demoHandler *Demo) *Handler {
-	var h Handler
-	h.Demo = demoHandler
+func NewHandler(demoHandler *UserHandler) *Factory {
+	var h Factory
+	h.UserHdl = demoHandler
 	return &h
 }

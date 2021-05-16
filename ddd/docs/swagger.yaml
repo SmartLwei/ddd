@@ -1,26 +1,17 @@
 definitions:
-  dto.AddDemoReq:
+  dto.AddUserReq:
     properties:
       name:
         example: demo_name
         type: string
     type: object
-  dto.Demo:
-    properties:
-      created_at:
-        type: integer
-      id:
-        type: integer
-      string:
-        type: string
-    type: object
-  dto.GetDemosResp:
+  dto.GetUserResp:
     properties:
       count:
         type: integer
       demos:
         items:
-          $ref: '#/definitions/dto.Demo'
+          $ref: '#/definitions/dto.User'
         type: array
     type: object
   dto.JSONResult:
@@ -32,21 +23,30 @@ definitions:
       message:
         type: string
     type: object
+  dto.User:
+    properties:
+      created_at:
+        type: integer
+      id:
+        type: integer
+      string:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
-  /demo/api/v1/demo:
+  /ddd/api/v1/user:
     post:
       consumes:
       - application/json
-      description: 数据库增接口demo的描述内容
-      operationId: InsertDemo
+      description: add a user to the system so that he will have an identity
+      operationId: AddUser
       parameters:
-      - description: AddDemoReq
+      - description: AddUserReq
         in: body
         name: data
         schema:
-          $ref: '#/definitions/dto.AddDemoReq'
+          $ref: '#/definitions/dto.AddUserReq'
       produces:
       - application/json
       responses:
@@ -54,15 +54,15 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.JSONResult'
-      summary: 数据库增接口demo
+      summary: add a user to the system
       tags:
-      - demo
-  /demo/api/v1/demos:
+      - user
+  /ddd/api/v1/users:
     get:
       consumes:
       - application/json
-      description: 数据库查接口demo的描述内容
-      operationId: GetDemos
+      description: find users from the given condition
+      operationId: GetUsers
       parameters:
       - example: 1
         in: query
@@ -90,9 +90,9 @@ paths:
             - $ref: '#/definitions/dto.JSONResult'
             - properties:
                 data:
-                  $ref: '#/definitions/dto.GetDemosResp'
+                  $ref: '#/definitions/dto.GetUserResp'
               type: object
-      summary: 数据库查接口demo
+      summary: find users
       tags:
-      - demo
+      - user
 swagger: "2.0"

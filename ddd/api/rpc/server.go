@@ -5,7 +5,7 @@ import (
 	"net"
 
 	gd "ddd/api/rpc/grpcdemo"
-	"ddd/cntlr"
+	"ddd/application"
 	"ddd/conf"
 
 	"google.golang.org/grpc"
@@ -14,10 +14,10 @@ import (
 type GRPCService struct {
 	setting *conf.GrpcSetting
 	server  *grpc.Server
-	ctl     *cntlr.Controller
+	ctl     *application.Factory
 }
 
-func NewGrpcService(setting *conf.GrpcSetting, ctl *cntlr.Controller) *GRPCService {
+func NewGrpcService(setting *conf.GrpcSetting, ctl *application.Factory) *GRPCService {
 	var s GRPCService
 	s.setting = setting
 	s.ctl = ctl
@@ -41,5 +41,5 @@ func (gs *GRPCService) Stop() {
 }
 
 func (gs *GRPCService) GetDemos(ctx context.Context, req *gd.GetDemosReq) (*gd.GetDemosResp, error) {
-	return gs.ctl.DemoCtl.GrpcGetDemos(req)
+	return gs.ctl.UserSvc.GrpcGetUsers(req)
 }

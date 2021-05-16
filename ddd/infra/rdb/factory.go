@@ -1,4 +1,4 @@
-package db
+package rdb
 
 import (
 	"ddd/conf"
@@ -10,16 +10,14 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-type Tx interface {
-	Begin() Tx
-	Rollback() Tx
-	Commit() Tx
-	Error() error
-	Orm() *gorm.DB
+type Factory struct {
+	UserRepo UserItf
 }
 
-type TxImp struct {
-	db *gorm.DB
+func NewFactory(orm *gorm.DB) *Factory {
+	var f Factory
+	f.UserRepo = NewUserRepo(orm)
+	return &f
 }
 
 // NewGorm new gorm connection pool
@@ -40,7 +38,7 @@ func NewGorm(setting *conf.DBSetting) *gorm.DB {
 	}
 	db, err := gorm.Open(mysql.New(mysqlConfig), &gormConfig)
 	if err != nil {
-		panic("db open failed: " + err.Error())
+		panic("rdb open failed: " + err.Error())
 	}
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxIdleConns(setting.MaxIdleConns)
@@ -49,27 +47,11 @@ func NewGorm(setting *conf.DBSetting) *gorm.DB {
 }
 
 func autoMigTables(db *gorm.DB) {
-	if err := db.AutoMigrate(&domain.Demo{}); err != nil {
+	if err := db.AutoMigrate(&domain.User{}); err != nil {
 		panic("auto migrate demo failed: " + err.Error())
 	}
 }
 
-func (tx *TxImp) Orm() *gorm.DB {
-	return tx.db
-}
-
-func (tx *TxImp) Begin() Tx {
-	return &TxImp{db: tx.Orm().Begin()}
-}
-
-func (tx *TxImp) Rollback() Tx {
-	return &TxImp{db: tx.Orm().Rollback()}
-}
-
-func (tx *TxImp) Commit() Tx {
-	return &TxImp{db: tx.Orm().Commit()}
-}
-
-func (tx *TxImp) Error() error {
-	return tx.db.Error
+func (f *Factory) GetUserRepo() UserItf {
+	return f.UserRepo
 }

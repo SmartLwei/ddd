@@ -1,4 +1,4 @@
-package db
+package rdb
 
 import (
 	"ddd/domain"
@@ -6,27 +6,27 @@ import (
 	"gorm.io/gorm"
 )
 
-type DemoItf interface {
-	Insert(demo *domain.Demo) error
-	Get(filter *domain.DemoFilter) (int64, []*domain.Demo, error)
+type UserItf interface {
+	Insert(demo *domain.User) error
+	Get(filter *domain.UserFilter) (int64, []*domain.User, error)
 }
 
-type DemoRepo struct {
+type UserRepo struct {
 	orm *gorm.DB
 }
 
-func NewDemo(orm *gorm.DB) DemoItf {
-	return &DemoRepo{orm: orm}
+func NewUserRepo(orm *gorm.DB) UserItf {
+	return &UserRepo{orm: orm}
 }
 
-func (d *DemoRepo) Insert(demo *domain.Demo) error {
+func (d *UserRepo) Insert(demo *domain.User) error {
 	return d.orm.Create(demo).Error
 }
 
-func (d *DemoRepo) Get(filter *domain.DemoFilter) (int64, []*domain.Demo, error) {
-	var db = d.orm.Model(&domain.Demo{})
+func (d *UserRepo) Get(filter *domain.UserFilter) (int64, []*domain.User, error) {
+	var db = d.orm.Model(&domain.User{})
 	var count int64
-	var demos []*domain.Demo
+	var demos []*domain.User
 	if filter.ID != 0 {
 		db = db.Where("id=?", filter.ID)
 	}

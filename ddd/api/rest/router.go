@@ -12,23 +12,23 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 
 	"ddd/api/rest/handler"
-	"ddd/cntlr"
+	"ddd/application"
 	"ddd/conf"
 )
 
 type Router struct {
 	setting *conf.RestSetting
 	server  *http.Server
-	handler *handler.Handler
+	handler *handler.Factory
 }
 
-func NewRouter(setting *conf.RestSetting, controller *cntlr.Controller) *Router {
+func NewRouter(setting *conf.RestSetting, controller *application.Factory) *Router {
 
 	var router = &Router{}
 	gin.SetMode(strings.ToLower(setting.Mode))
 	router.setting = setting
 
-	var demoHandler = handler.NewDemoHandler(controller.DemoCtl)
+	var demoHandler = handler.NewUserHandler(controller.UserSvc)
 	router.handler = handler.NewHandler(demoHandler)
 
 	router.buildRouter()
@@ -45,9 +45,9 @@ func (r *Router) buildRouter() {
 
 	engine.GET("/", func(c *gin.Context) { c.JSON(http.StatusOK, "service is alive") })
 	{
-		apiV1 := engine.Group("/demo/api/v1")
-		apiV1.POST("/demo", r.handler.Demo.AddDemo)
-		apiV1.GET("/demos", r.handler.Demo.GetDemos)
+		apiV1 := engine.Group("/ddd/api/v1")
+		apiV1.POST("/user", r.handler.UserHdl.AddUser)
+		apiV1.GET("/users", r.handler.UserHdl.GetUsers)
 	}
 	r.server = &http.Server{Addr: r.setting.Port, Handler: engine}
 }

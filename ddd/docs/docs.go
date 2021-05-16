@@ -24,9 +24,9 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/demo/api/v1/demo": {
+        "/ddd/api/v1/user": {
             "post": {
-                "description": "数据库增接口demo的描述内容",
+                "description": "add a user to the system so that he will have an identity",
                 "consumes": [
                     "application/json"
                 ],
@@ -34,17 +34,17 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "demo"
+                    "user"
                 ],
-                "summary": "数据库增接口demo",
-                "operationId": "InsertDemo",
+                "summary": "add a user to the system",
+                "operationId": "AddUser",
                 "parameters": [
                     {
-                        "description": "AddDemoReq",
+                        "description": "AddUserReq",
                         "name": "data",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/dto.AddDemoReq"
+                            "$ref": "#/definitions/dto.AddUserReq"
                         }
                     }
                 ],
@@ -58,9 +58,9 @@ var doc = `{
                 }
             }
         },
-        "/demo/api/v1/demos": {
+        "/ddd/api/v1/users": {
             "get": {
-                "description": "数据库查接口demo的描述内容",
+                "description": "find users from the given condition",
                 "consumes": [
                     "application/json"
                 ],
@@ -68,10 +68,10 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "demo"
+                    "user"
                 ],
-                "summary": "数据库查接口demo",
-                "operationId": "GetDemos",
+                "summary": "find users",
+                "operationId": "GetUsers",
                 "parameters": [
                     {
                         "type": "integer",
@@ -110,7 +110,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.GetDemosResp"
+                                            "$ref": "#/definitions/dto.GetUserResp"
                                         }
                                     }
                                 }
@@ -122,7 +122,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "dto.AddDemoReq": {
+        "dto.AddUserReq": {
             "type": "object",
             "properties": {
                 "name": {
@@ -131,21 +131,7 @@ var doc = `{
                 }
             }
         },
-        "dto.Demo": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "string": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.GetDemosResp": {
+        "dto.GetUserResp": {
             "type": "object",
             "properties": {
                 "count": {
@@ -154,7 +140,7 @@ var doc = `{
                 "demos": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.Demo"
+                        "$ref": "#/definitions/dto.User"
                     }
                 }
             }
@@ -169,6 +155,20 @@ var doc = `{
                     "type": "object"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.User": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "string": {
                     "type": "string"
                 }
             }

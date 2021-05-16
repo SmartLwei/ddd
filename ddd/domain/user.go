@@ -1,11 +1,11 @@
 package domain
 
-type Demo struct {
+type User struct {
 	Model
 	Name string `json:"name" gorm:"type:varchar(255);index: idx_name"`
 }
 
-type DemoFilter struct {
+type UserFilter struct {
 	ID     int64  `json:"id"`
 	Name   string `json:"name"`
 	Offset int    `json:"offset"`

@@ -8,36 +8,36 @@ type JSONResult struct {
 	Data    interface{} `json:"data"`
 }
 
-type AddDemoReq struct {
+type AddUserReq struct {
 	Name string `json:"name" form:"name" example:"demo_name"`
 }
 
-func (req *AddDemoReq) ValidateAnd2Model() (*domain.Demo, error) {
-	return &domain.Demo{Name: req.Name}, nil
+func (req *AddUserReq) ValidateAnd2Model() (*domain.User, error) {
+	return &domain.User{Name: req.Name}, nil
 }
 
-type Demo struct {
+type User struct {
 	ID        int64  `json:"id"`
 	CreatedAt int64  `json:"created_at"`
 	Name      string `json:"string"`
 }
 
-func (d *Demo) GenerateFromDomain(domainDemo *domain.Demo) error {
-	d.ID = domainDemo.ID
-	d.CreatedAt = domainDemo.CreatedAt
-	d.Name = domainDemo.Name
+func (d *User) GenerateFromDomain(domainUser *domain.User) error {
+	d.ID = domainUser.ID
+	d.CreatedAt = domainUser.CreatedAt
+	d.Name = domainUser.Name
 	return nil
 }
 
-type GetDemosReq struct {
+type GetUserReq struct {
 	ID     int64  `json:"id" form:"id" example:"1"`
 	Name   string `json:"name" form:"name" example:"demo_name"`
 	Offset int    `json:"offset" form:"offset" example:"0"`
 	Limit  int    `json:"limit" form:"limit" example:"10"`
 }
 
-func (req *GetDemosReq) ValidateAnd2Model() (*domain.DemoFilter, error) {
-	return &domain.DemoFilter{
+func (req *GetUserReq) ValidateAnd2Model() (*domain.UserFilter, error) {
+	return &domain.UserFilter{
 		ID:     req.ID,
 		Name:   req.Name,
 		Offset: req.Offset,
@@ -45,7 +45,7 @@ func (req *GetDemosReq) ValidateAnd2Model() (*domain.DemoFilter, error) {
 	}, nil
 }
 
-type GetDemosResp struct {
+type GetUserResp struct {
 	Count int64   `json:"count"`
-	Demos []*Demo `json:"demos"`
+	Demos []*User `json:"demos"`
 }

@@ -3,26 +3,31 @@ package main
 import (
 	"ddd/api/rest"
 	"ddd/api/rpc"
-	"ddd/cntlr"
+	"ddd/application"
 	"ddd/conf"
 	_ "ddd/docs"
-	"ddd/infra/db"
+	"ddd/infra/rdb"
+	"ddd/log"
 	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"go.uber.org/zap"
 )
 
 func main() {
 	// global config
+	log.Init("DEBUG")
 	var setting = getSetting()
+	log.InfoZ("get setting", zap.Reflect("setting", setting))
 
 	// infrastructure layer
-	var orm = db.NewGorm(setting.DB)
-	var repoFactory = db.NewFactory(orm)
+	var orm = rdb.NewGorm(setting.DB)
+	var repoFactory = rdb.NewFactory(orm)
 
 	// application layer
-	var controller = cntlr.NewController(repoFactory)
+	var controller = application.NewController(repoFactory)
 
 	// API layer
 	var httpServer = rest.NewRouter(setting.Rest, controller)
